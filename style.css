@@ -9178,3 +9178,69 @@ html[data-theme="light"] .compare-help {
   color: #475569 !important;
 }
 
+/* ======== Round 2 fixes ======== */
+
+/* Fix: dark mode detail-card shows white background */
+/* Root cause: .compare-detail .detail-card.open forces background:#fff !important */
+html[data-theme="dark"] .compare-detail .detail-card.open,
+html[data-theme="dark"] .detail-modal .detail-card.open,
+html[data-theme="dark"] .rx-body .detail-card.open {
+  background: rgba(8,18,31,.94) !important;
+  border-color: rgba(112,132,165,.26) !important;
+  color: #F3F7FC !important;
+}
+html[data-theme="dark"] .compare-detail .detail-card.open h3,
+html[data-theme="dark"] .detail-modal .detail-card.open h3 {
+  color: #17CFF3 !important;
+  border-left-color: rgba(23,207,243,.48) !important;
+}
+html[data-theme="dark"] .compare-detail .detail-card.open h4,
+html[data-theme="dark"] .detail-modal .detail-card.open h4 {
+  color: #C7D2E3 !important;
+}
+html[data-theme="dark"] .compare-detail .detail-card.open p,
+html[data-theme="dark"] .compare-detail .detail-card.open .v,
+html[data-theme="dark"] .compare-detail .detail-card.open .k,
+html[data-theme="dark"] .detail-modal .detail-card.open p,
+html[data-theme="dark"] .detail-modal .detail-card.open .v,
+html[data-theme="dark"] .detail-modal .detail-card.open .k {
+  color: #B0BDD0 !important;
+}
+html[data-theme="dark"] .compare-detail .detail-card.open .detail-section {
+  border-top-color: rgba(112,132,165,.22) !important;
+}
+
+/* Fix: row label text invisible in dark mode */
+html[data-theme="dark"] .v29-table tbody th {
+  color: #C7D2E3 !important;
+}
+html[data-theme="dark"] .v29-table tbody th small {
+  color: #8DA0B9 !important;
+}
+html[data-theme="dark"] .v29-table .overall-row > th {
+  color: #ffffff !important;
+}
+
+/* Remove unexpected emoji decorations from result table row labels */
+.v29-table .overall-row > th span::before,
+.v29-table .source-row > th span::before,
+.v29-table .insert-row > th span::before {
+  content: "" !important;
+  display: none !important;
+}
+
+/* Text size consistency: boost comparison table label column readability */
+.comparison-table.cmp-v2 .cmp-lbl-axis {
+  font-size: .64rem !important;
+}
+.comparison-table.cmp-v2 .cmp-lbl-metric {
+  font-size: .72rem !important;
+}
+.comparison-table.cmp-v2 .cmp-lbl-src {
+  font-size: .58rem !important;
+}
+.cmp-pill {
+  font-size: .72rem !important;
+  padding: 5px 11px !important;
+}
+
