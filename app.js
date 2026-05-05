@@ -323,7 +323,7 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
             </thead>
             <tbody>
               ${row("総合評価", "", (drug, type) => `<span class="rx-status-pill ${badgeClass(type)}">${escapeHtml(getAxisSummary(drug))}</span>`, "overall-row")}
-              ${row("専門書", "JSNP 第39版", (drug, type) => `<span class="rx-status-pill ${badgeClass(type)}">${escapeHtml(getAxisSummary(drug))}</span>`, "source-row")}
+              ${row("専門書", "妊娠と授乳　4版", (drug, type) => `<span class="rx-status-pill ${badgeClass(type)}">${escapeHtml(getAxisSummary(drug))}</span>`, "source-row")}
               ${row("添付文書", "", (drug) => renderInsertHelpButtonCompact(getAxisInsert(drug), currentMode), "insert-row package-row")}
               ${row("詳細", "", (drug) => `<button type="button" class="rx-detail-btn" data-drug-id="${escapeHtml(drug.id)}">詳細を見る ›</button>`, "detail-row")}
             </tbody>

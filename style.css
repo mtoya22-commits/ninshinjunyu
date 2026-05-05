@@ -9244,3 +9244,124 @@ html[data-theme="dark"] .v29-table .overall-row > th {
   padding: 5px 11px !important;
 }
 
+/* ======== Round 3 fixes ======== */
+
+/* Restore emoji row-label decorations for main result table
+   (overrides the Round 2 removal — user wants them) */
+.v29-table .overall-row > th span::before {
+  content: "👑 " !important;
+  display: inline !important;
+}
+.v29-table .source-row > th span::before {
+  content: "📖 " !important;
+  display: inline !important;
+}
+.v29-table .insert-row > th span::before {
+  content: "📄 " !important;
+  display: inline !important;
+}
+
+/* Row label text: slightly larger */
+.v29-table th:first-child,
+.v29-table td:first-child {
+  font-size: .73rem !important;
+}
+.v29-table th:first-child small {
+  font-size: .56rem !important;
+}
+
+/* Overall-row data cells: prominent highlight */
+.v29-table .overall-row > td {
+  padding-top: 11px !important;
+  padding-bottom: 11px !important;
+  background: rgba(17,146,76,.09) !important;
+}
+html[data-theme="dark"] .v29-table .overall-row > td {
+  background: rgba(17,146,76,.13) !important;
+}
+/* Overall-row pills: larger than source/insert pills */
+.v29-table .overall-row .rx-status-pill {
+  font-size: 1.06rem !important;
+  padding: 11px 15px !important;
+  min-height: 40px !important;
+}
+/* Source and insert row pills: slightly smaller to contrast with overall */
+.v29-table .source-row .rx-status-pill {
+  font-size: .92rem !important;
+  padding: 8px 12px !important;
+}
+
+/* Fix: "詳細を見る" button overflows cell */
+.v29-table .detail-row .rx-detail-btn {
+  font-size: .78rem !important;
+  white-space: normal !important;
+  word-break: keep-all !important;
+  line-height: 1.25 !important;
+  padding: 5px 8px !important;
+  width: 100%;
+}
+
+/* Fix: insert-compact-chip overflows cell in narrow tables */
+.v29-table .insert-row .insert-compact-chip {
+  max-width: calc(100% - 4px) !important;
+  font-size: .74rem !important;
+}
+.v29-table .insert-row .insert-compact-chip .chip-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 52px !important;
+}
+
+/* cmp-v2: equal, stronger highlight for both overall rows */
+.comparison-table.cmp-v2 .cmp-row-po .cmp-cell,
+.comparison-table.cmp-v2 .cmp-row-po .cmp-label-td {
+  background: rgba(23,207,243,.09) !important;
+  border-top: 2px solid rgba(23,207,243,.24) !important;
+  border-bottom: 1px solid rgba(23,207,243,.12) !important;
+}
+.comparison-table.cmp-v2 .cmp-row-lo .cmp-cell,
+.comparison-table.cmp-v2 .cmp-row-lo .cmp-label-td {
+  background: rgba(105,230,165,.09) !important;
+  border-top: 2px solid rgba(105,230,165,.24) !important;
+  border-bottom: 1px solid rgba(105,230,165,.12) !important;
+}
+/* Overall pills in cmp-v2: larger than insert chips */
+.comparison-table.cmp-v2 .cmp-row-po .cmp-pill,
+.comparison-table.cmp-v2 .cmp-row-lo .cmp-pill {
+  font-size: .84rem !important;
+  padding: 7px 14px !important;
+  min-height: 32px !important;
+}
+
+/* Main category (大分類) buttons: shorter, closer to square */
+.v29-category-grid .top-category {
+  min-height: 70px !important;
+  padding: 7px 5px 6px !important;
+}
+.v29-category-grid .cat-emoji {
+  font-size: 1.36rem !important;
+}
+.v29-category-grid .cat-name {
+  font-size: .84rem !important;
+  letter-spacing: -.03em !important;
+}
+.v29-category-grid .cat-count {
+  font-size: .80rem !important;
+  padding: 2px 8px !important;
+  min-width: 30px !important;
+}
+
+/* Subcategory (小分類) button text: improve contrast in dark mode */
+html[data-theme="dark"] .subcategory-btn {
+  color: #D4E0EF !important;
+}
+html[data-theme="dark"] .subcategory-panel {
+  background: rgba(10,20,36,.92) !important;
+  border-color: rgba(112,132,165,.32) !important;
+}
+
+/* Light mode overrides for round 3 */
+html[data-theme="light"] .v29-table .overall-row > td {
+  background: rgba(17,146,76,.07) !important;
+}
+
