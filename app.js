@@ -323,7 +323,7 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
             </thead>
             <tbody>
               ${row("総合評価", "", (drug, type) => `<span class="rx-status-pill ${badgeClass(type)}">${escapeHtml(getAxisSummary(drug))}</span>`, "overall-row")}
-              ${row("専門書", "妊娠と授乳4版", (drug, type) => `<span class="rx-status-pill ${badgeClass(type)}">${escapeHtml(getAxisSummary(drug))}</span>`, "source-row")}
+              ${row("専門書", "JSNP 第39版", (drug, type) => `<span class="rx-status-pill ${badgeClass(type)}">${escapeHtml(getAxisSummary(drug))}</span>`, "source-row")}
               ${row("添付文書", "", (drug) => renderInsertHelpButtonCompact(getAxisInsert(drug), currentMode), "insert-row package-row")}
               ${row("詳細", "", (drug) => `<button type="button" class="rx-detail-btn" data-drug-id="${escapeHtml(drug.id)}">詳細を見る ›</button>`, "detail-row")}
             </tbody>
@@ -1501,45 +1501,102 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
 
     function renderComparisonTable(drugs) {
       const countClass = drugs.length <= 2 ? `tight-${drugs.length}` : `wide-${Math.min(drugs.length, 4)}`;
+
+      const cmpRows = [
+        {
+          id: "po",
+          iconEmoji: "🤰",
+          iconClass: "cmp-icon-po",
+          axis: "妊娠",
+          metric: "総合評価",
+          caption: "JSNP 第39版",
+          cells: drugs.map(d => {
+            const type = statusType(d.pregnancySummary, d.pregnancyInsert, "pregnancy");
+            return `<td class="cmp-cell cmp-cell-${type}">${comparePillCmp(d.pregnancySummary, d.pregnancyInsert, "pregnancy")}</td>`;
+          }).join("")
+        },
+        {
+          id: "pi",
+          iconEmoji: "🤰",
+          iconClass: "cmp-icon-pi",
+          axis: "妊娠",
+          metric: "添付文書",
+          caption: "添付文書分類",
+          cells: drugs.map(d => {
+            const state = getInsertCompactState(d.pregnancyInsert, "pregnancy");
+            return `<td class="cmp-cell cmp-cell-insert cmp-cell-${state}">${renderInsertHelpButtonCompact(d.pregnancyInsert, "pregnancy")}</td>`;
+          }).join("")
+        },
+        {
+          id: "lo",
+          iconEmoji: "🤱",
+          iconClass: "cmp-icon-lo",
+          axis: "授乳",
+          metric: "総合評価",
+          caption: "JSNP 第39版",
+          cells: drugs.map(d => {
+            const type = statusType(d.lactationSummary, d.lactationInsert, "lactation");
+            return `<td class="cmp-cell cmp-cell-${type}">${comparePillCmp(d.lactationSummary, d.lactationInsert, "lactation")}</td>`;
+          }).join("")
+        },
+        {
+          id: "li",
+          iconEmoji: "🤱",
+          iconClass: "cmp-icon-li",
+          axis: "授乳",
+          metric: "添付文書",
+          caption: "添付文書分類",
+          cells: drugs.map(d => {
+            const state = getInsertCompactState(d.lactationInsert, "lactation");
+            return `<td class="cmp-cell cmp-cell-insert cmp-cell-${state}">${renderInsertHelpButtonCompact(d.lactationInsert, "lactation")}</td>`;
+          }).join("")
+        }
+      ];
+
       return `
-        <table class="comparison-table ${countClass}" data-drug-count="${drugs.length}">
+        <table class="comparison-table cmp-v2 ${countClass}" data-drug-count="${drugs.length}">
           <thead>
-            <tr>
-              <th>項目</th>
+            <tr class="cmp-head-row">
+              <th class="cmp-label-col"></th>
               ${drugs.map(drug => {
                 const selected = selectedDrugs.some(d => d.id === drug.id);
                 return `
-                <th>
-                  <button type="button" class="drug-compare-btn" data-compare-drug="${escapeHtml(drug.id)}">${escapeHtml(drug.brands[0])}</button>
-                  <div class="drug-compare-sub">${escapeHtml(drug.ingredientJa)}</div>
-                  <div class="compare-head-actions">
-                    <button type="button" class="compare-detail-btn" data-compare-drug="${escapeHtml(drug.id)}">詳細</button>
-                    <button type="button" class="compare-select-btn${selected ? " selected" : ""}" data-compare-select="${escapeHtml(drug.id)}">${selected ? "✓ 選択中" : "＋ 選択"}</button>
+                <th class="cmp-drug-col">
+                  <button type="button" class="cmp-drug-name drug-compare-btn" data-compare-drug="${escapeHtml(drug.id)}">${escapeHtml(drug.brands[0])}</button>
+                  <div class="cmp-drug-ing drug-compare-sub">${escapeHtml(drug.ingredientJa)}</div>
+                  <div class="cmp-drug-btns compare-head-actions">
+                    <button type="button" class="compare-detail-btn cmp-btn-detail" data-compare-drug="${escapeHtml(drug.id)}">詳細</button>
+                    <button type="button" class="compare-select-btn cmp-btn-select${selected ? " selected" : ""}" data-compare-select="${escapeHtml(drug.id)}">${selected ? "✓ 選択中" : "＋ 選択"}</button>
                   </div>
                 </th>
-              `}).join("")}
+                `;
+              }).join("")}
             </tr>
           </thead>
           <tbody>
-            <tr class="overall-row pregnancy-overall-row">
-              <td>妊娠<br>総合評価</td>
-              ${drugs.map(drug => `<td>${compareBadge(drug.pregnancySummary, drug.pregnancyInsert, "pregnancy")}</td>`).join("")}
-            </tr>
-            <tr class="package-row pregnancy-package-row">
-              <td>妊娠<br>添付文書</td>
-              ${drugs.map(drug => `<td class="insert-cell">${renderInsertHelpButtonCompact(drug.pregnancyInsert, "pregnancy")}</td>`).join("")}
-            </tr>
-            <tr class="overall-row lactation-overall-row">
-              <td>授乳<br>総合評価</td>
-              ${drugs.map(drug => `<td>${compareBadge(drug.lactationSummary, drug.lactationInsert, "lactation")}</td>`).join("")}
-            </tr>
-            <tr class="package-row lactation-package-row">
-              <td>授乳<br>添付文書</td>
-              ${drugs.map(drug => `<td class="insert-cell">${renderInsertHelpButtonCompact(drug.lactationInsert, "lactation")}</td>`).join("")}
-            </tr>
+            ${cmpRows.map(row => `
+              <tr class="cmp-row cmp-row-${row.id}">
+                <td class="cmp-label-col cmp-label-td">
+                  <div class="cmp-lbl">
+                    <div class="cmp-icon ${row.iconClass}">${row.iconEmoji}</div>
+                    <div class="cmp-lbl-text">
+                      <b class="cmp-lbl-axis">${row.axis}</b>
+                      <span class="cmp-lbl-metric">${row.metric}</span>
+                      <small class="cmp-lbl-src">${row.caption}</small>
+                    </div>
+                  </div>
+                </td>
+                ${row.cells}
+              </tr>
+            `).join("")}
           </tbody>
         </table>
       `;
+    }
+
+    function comparePillCmp(summary, insert, axis) {
+      const type = statusType(summary, insert, axis);
+      return `<span class="cmp-pill cmp-pill-${type}">${escapeHtml(summary)}</span>`;
     }
 
     function compareBadge(summary, insert, axis) {
