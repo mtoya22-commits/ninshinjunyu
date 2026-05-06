@@ -9736,3 +9736,30 @@ html[data-theme] body .rx-table.v29-table tr.insert-row th,
 html[data-theme] body .rx-table.v29-table tr.package-row th {
   font-size: .73rem !important;
 }
+
+/* ============================================================
+   Round 8: Antibacterial dark badge + button alignment
+   ============================================================ */
+
+/* Antibacterial count badge: explicit dark teal (prevents white badge in dark mode) */
+html[data-theme="dark"] .v29-category-grid .top-category.antibacterial .cat-count {
+  background: rgba(23,207,243,.12) !important;
+  border-color: rgba(23,207,243,.38) !important;
+  color: rgba(23,207,243,.88) !important;
+}
+
+/* Category comparison modal: equalise 詳細 and 選択中 button heights */
+.comparison-table.cmp-v2 .cmp-btn-detail,
+.comparison-table.cmp-v2 .cmp-btn-select {
+  margin-top: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 26px !important;
+  min-height: 26px !important;
+  padding: 0 9px !important;
+  font-size: .63rem !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+}
