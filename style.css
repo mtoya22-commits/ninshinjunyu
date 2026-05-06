@@ -9514,19 +9514,19 @@ html[data-theme] .v29-category-grid .cat-count {
   }
 }
 
-/* 2. v29-table label column: narrower, same both themes */
+/* 2. v29-table label column: slightly wider for single-line labels */
 html[data-theme] .rx-table.v29-table th:first-child,
 html[data-theme] .rx-table.v29-table td:first-child {
-  width: 72px !important;
-  min-width: 72px !important;
-  max-width: 72px !important;
+  width: 88px !important;
+  min-width: 88px !important;
+  max-width: 88px !important;
 }
 @media (max-width: 430px) {
   html[data-theme] .rx-table.v29-table th:first-child,
   html[data-theme] .rx-table.v29-table td:first-child {
-    width: 66px !important;
-    min-width: 66px !important;
-    max-width: 66px !important;
+    width: 76px !important;
+    min-width: 76px !important;
+    max-width: 76px !important;
   }
 }
 
@@ -9741,11 +9741,11 @@ html[data-theme] body .rx-table.v29-table tr.package-row th {
    Round 8: Antibacterial dark badge + button alignment
    ============================================================ */
 
-/* Antibacterial count badge: explicit dark teal (prevents white badge in dark mode) */
-html[data-theme="dark"] .v29-category-grid .top-category.antibacterial .cat-count {
-  background: rgba(23,207,243,.12) !important;
-  border-color: rgba(23,207,243,.38) !important;
-  color: rgba(23,207,243,.88) !important;
+/* All category count badges in dark mode: white pill (user requested) */
+html[data-theme="dark"] .v29-category-grid .top-category .cat-count {
+  background: rgba(255,255,255,.90) !important;
+  border-color: rgba(255,255,255,.55) !important;
+  color: #1a2b3c !important;
 }
 
 /* Category comparison modal: equalise 詳細 and 選択中 button heights */
