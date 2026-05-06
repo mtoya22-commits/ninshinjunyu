@@ -7221,14 +7221,11 @@ html[data-theme="light"] .rx-table.v29-table tr.overall-row th {
   color: #ffffff !important;
   border-top: 2.5px solid #86efac !important;
   border-bottom: 2.5px solid #86efac !important;
-  font-size: 1.02rem !important;
-  line-height: 1.25 !important;
 }
 
 html[data-theme="light"] .rx-table.v29-table tr.overall-row th span::before {
   content: "👑";
   display: block;
-  font-size: 1.05rem;
   line-height: 1;
   margin-bottom: 3px;
 }
@@ -7306,7 +7303,6 @@ html[data-theme="light"] .rx-table.v29-table tr.insert-row th,
 html[data-theme="light"] .rx-table.v29-table tr.package-row th {
   background: linear-gradient(180deg, #334155 0%, #29384a 100%) !important;
   color: #e8eef6 !important;
-  font-size: .88rem !important;
 }
 
 html[data-theme="light"] .rx-table.v29-table tr.insert-row .insert-compact-chip,
