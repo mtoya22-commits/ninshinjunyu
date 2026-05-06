@@ -9472,3 +9472,150 @@ html[data-theme="light"] .comparison-table.cmp-v2 .cmp-row-lo .cmp-cell,
 html[data-theme="light"] .comparison-table.cmp-v2 .cmp-row-lo .cmp-label-td {
   border-top: 3px solid rgba(71,120,198,.28) !important;
 }
+
+/* ============================================================
+   Round 5: Identical layout for both themes — color-only diffs
+   All layout rules use html[data-theme] (no value) so they
+   have the same specificity as theme-specific rules and win
+   by being later in the cascade.
+   ============================================================ */
+
+/* 1. Category grid: same size in both themes */
+html[data-theme] .v29-category-grid .top-category {
+  min-height: 72px !important;
+  padding: 7px 5px 6px !important;
+}
+html[data-theme] .v29-category-grid .cat-emoji {
+  font-size: 1.28rem !important;
+}
+html[data-theme] .v29-category-grid .cat-name {
+  font-size: .82rem !important;
+  color: #CBD5E1 !important;
+}
+html[data-theme] .v29-category-grid .cat-count {
+  font-size: .78rem !important;
+  padding: 2px 7px !important;
+  min-width: 28px !important;
+  color: #94A3B8 !important;
+  background: rgba(112,132,165,.16) !important;
+  border-color: rgba(112,132,165,.28) !important;
+}
+@media (max-width: 430px) {
+  html[data-theme] .v29-category-grid .top-category {
+    min-height: 66px !important;
+    padding: 6px 4px 5px !important;
+  }
+  html[data-theme] .v29-category-grid .cat-emoji {
+    font-size: 1.1rem !important;
+  }
+  html[data-theme] .v29-category-grid .cat-name {
+    font-size: .74rem !important;
+  }
+  html[data-theme] .v29-category-grid .cat-count {
+    font-size: .70rem !important;
+    padding: 1px 6px !important;
+    min-width: 24px !important;
+  }
+}
+
+/* 2. v29-table label column: narrower, same both themes */
+html[data-theme] .rx-table.v29-table th:first-child,
+html[data-theme] .rx-table.v29-table td:first-child {
+  width: 72px !important;
+  min-width: 72px !important;
+  max-width: 72px !important;
+}
+@media (max-width: 430px) {
+  html[data-theme] .rx-table.v29-table th:first-child,
+  html[data-theme] .rx-table.v29-table td:first-child {
+    width: 66px !important;
+    min-width: 66px !important;
+    max-width: 66px !important;
+  }
+}
+
+/* 3. Overall row: compact pill, 1-line, centered — same both themes */
+html[data-theme] .rx-table.v29-table tr.overall-row td {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+html[data-theme] .rx-table.v29-table tr.overall-row .rx-status-pill {
+  min-width: 0 !important;
+  min-height: 28px !important;
+  max-width: 100% !important;
+  padding: 6px 6px !important;
+  font-size: .80rem !important;
+  font-weight: 950 !important;
+  white-space: nowrap !important;
+  letter-spacing: -.02em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+@media (max-width: 430px) {
+  html[data-theme] .rx-table.v29-table tr.overall-row .rx-status-pill {
+    font-size: .76rem !important;
+    padding: 5px 5px !important;
+    min-height: 26px !important;
+  }
+}
+
+/* 4. Source row: compact pill — same both themes */
+html[data-theme] .rx-table.v29-table tr.source-row .rx-status-pill {
+  min-width: 0 !important;
+  min-height: 24px !important;
+  max-width: 100% !important;
+  padding: 5px 5px !important;
+  font-size: .76rem !important;
+  font-weight: 900 !important;
+  white-space: nowrap !important;
+  letter-spacing: -.02em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+@media (max-width: 430px) {
+  html[data-theme] .rx-table.v29-table tr.source-row .rx-status-pill {
+    font-size: .72rem !important;
+    padding: 4px 4px !important;
+  }
+}
+
+/* 5. Insert chip: compact, no overlap — same both themes */
+html[data-theme] .rx-table.v29-table tr.insert-row .insert-compact-chip,
+html[data-theme] .rx-table.v29-table tr.package-row .insert-compact-chip {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 24px !important;
+  padding: 4px 18px 4px 7px !important;
+  font-size: .70rem !important;
+}
+html[data-theme] .rx-table.v29-table tr.insert-row .insert-compact-chip .help-mark,
+html[data-theme] .rx-table.v29-table tr.package-row .insert-compact-chip .help-mark {
+  right: 3px !important;
+  width: 13px !important;
+  height: 13px !important;
+  font-size: 8px !important;
+}
+@media (max-width: 430px) {
+  html[data-theme] .rx-table.v29-table tr.insert-row .insert-compact-chip,
+  html[data-theme] .rx-table.v29-table tr.package-row .insert-compact-chip {
+    font-size: .66rem !important;
+    padding: 3px 16px 3px 6px !important;
+    min-height: 22px !important;
+  }
+}
+
+/* 6. Detail row button: same both themes */
+html[data-theme] .rx-table.v29-table tr.detail-row .rx-detail-btn {
+  font-size: .80rem !important;
+  font-weight: 950 !important;
+  white-space: nowrap !important;
+  padding: 6px 10px !important;
+}
+@media (max-width: 430px) {
+  html[data-theme] .rx-table.v29-table tr.detail-row .rx-detail-btn {
+    font-size: .76rem !important;
+    padding: 5px 8px !important;
+  }
+}
