@@ -9619,3 +9619,74 @@ html[data-theme] .rx-table.v29-table tr.detail-row .rx-detail-btn {
     padding: 5px 8px !important;
   }
 }
+
+/* ============================================================
+   Round 6: Fix remaining dark/light layout differences
+   All selectors use html[data-theme] (no value) at same
+   specificity as existing theme-specific rules; later wins.
+   ============================================================ */
+
+/* A. Category buttons: match light mode exact sizes for both themes.
+      html[data-theme] .v29-category-grid .top-category .cat-* = 0,4,1
+      (same as light mode .cat-* rules, later in cascade → wins) */
+html[data-theme] .v29-category-grid .top-category {
+  min-height: 62px !important;
+  padding: 7px 5px 6px !important;
+}
+html[data-theme] .v29-category-grid .top-category .cat-emoji {
+  font-size: 1.1rem !important;
+  line-height: 1 !important;
+}
+html[data-theme] .v29-category-grid .top-category .cat-name {
+  font-size: .66rem !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.03em !important;
+  color: inherit !important;
+}
+html[data-theme] .v29-category-grid .top-category .cat-count {
+  font-size: .60rem !important;
+  min-width: 28px !important;
+  padding: 2px 7px !important;
+}
+@media (max-width: 430px) {
+  html[data-theme] .v29-category-grid .top-category {
+    min-height: 60px !important;
+    padding: 7px 4px 6px !important;
+  }
+  html[data-theme] .v29-category-grid .top-category .cat-name {
+    font-size: .63rem !important;
+  }
+  html[data-theme] .v29-category-grid .top-category .cat-count {
+    font-size: .58rem !important;
+    min-width: 27px !important;
+  }
+}
+
+/* B. Label column th text: match dark mode (compact) for both themes.
+      html[data-theme] .rx-table.v29-table tr.overall-row th = 0,4,3
+      same as html[data-theme="light"] ... th — later in cascade wins. */
+html[data-theme] .rx-table.v29-table tr.overall-row th {
+  font-size: .76rem !important;
+  line-height: 1.2 !important;
+}
+html[data-theme] .rx-table.v29-table tr.insert-row th,
+html[data-theme] .rx-table.v29-table tr.package-row th {
+  font-size: .73rem !important;
+}
+
+/* C. Detail row button: keep arrow inline (flex row) for both themes */
+html[data-theme] .rx-table.v29-table tr.detail-row .rx-detail-btn {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 3px !important;
+  white-space: nowrap !important;
+}
+
+/* D. Mobile: remove light-mode's forced min-width on all cells */
+@media (max-width: 430px) {
+  html[data-theme] .rx-table.v29-table th,
+  html[data-theme] .rx-table.v29-table td {
+    min-width: 0 !important;
+  }
+}
