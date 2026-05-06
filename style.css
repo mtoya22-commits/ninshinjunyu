@@ -7221,14 +7221,11 @@ html[data-theme="light"] .rx-table.v29-table tr.overall-row th {
   color: #ffffff !important;
   border-top: 2.5px solid #86efac !important;
   border-bottom: 2.5px solid #86efac !important;
-  font-size: 1.02rem !important;
-  line-height: 1.25 !important;
 }
 
 html[data-theme="light"] .rx-table.v29-table tr.overall-row th span::before {
   content: "👑";
   display: block;
-  font-size: 1.05rem;
   line-height: 1;
   margin-bottom: 3px;
 }
@@ -7306,7 +7303,6 @@ html[data-theme="light"] .rx-table.v29-table tr.insert-row th,
 html[data-theme="light"] .rx-table.v29-table tr.package-row th {
   background: linear-gradient(180deg, #334155 0%, #29384a 100%) !important;
   color: #e8eef6 !important;
-  font-size: .88rem !important;
 }
 
 html[data-theme="light"] .rx-table.v29-table tr.insert-row .insert-compact-chip,
@@ -9471,4 +9467,299 @@ html[data-theme="light"] .comparison-table.cmp-v2 .cmp-label-col {
 html[data-theme="light"] .comparison-table.cmp-v2 .cmp-row-lo .cmp-cell,
 html[data-theme="light"] .comparison-table.cmp-v2 .cmp-row-lo .cmp-label-td {
   border-top: 3px solid rgba(71,120,198,.28) !important;
+}
+
+/* ============================================================
+   Round 5: Identical layout for both themes — color-only diffs
+   All layout rules use html[data-theme] (no value) so they
+   have the same specificity as theme-specific rules and win
+   by being later in the cascade.
+   ============================================================ */
+
+/* 1. Category grid: same size in both themes */
+html[data-theme] .v29-category-grid .top-category {
+  min-height: 72px !important;
+  padding: 7px 5px 6px !important;
+}
+html[data-theme] .v29-category-grid .cat-emoji {
+  font-size: 1.28rem !important;
+}
+html[data-theme] .v29-category-grid .cat-name {
+  font-size: .82rem !important;
+  color: #CBD5E1 !important;
+}
+html[data-theme] .v29-category-grid .cat-count {
+  font-size: .78rem !important;
+  padding: 2px 7px !important;
+  min-width: 28px !important;
+  color: #94A3B8 !important;
+  background: rgba(112,132,165,.16) !important;
+  border-color: rgba(112,132,165,.28) !important;
+}
+@media (max-width: 430px) {
+  html[data-theme] .v29-category-grid .top-category {
+    min-height: 66px !important;
+    padding: 6px 4px 5px !important;
+  }
+  html[data-theme] .v29-category-grid .cat-emoji {
+    font-size: 1.1rem !important;
+  }
+  html[data-theme] .v29-category-grid .cat-name {
+    font-size: .74rem !important;
+  }
+  html[data-theme] .v29-category-grid .cat-count {
+    font-size: .70rem !important;
+    padding: 1px 6px !important;
+    min-width: 24px !important;
+  }
+}
+
+/* 2. v29-table label column: narrower, same both themes */
+html[data-theme] .rx-table.v29-table th:first-child,
+html[data-theme] .rx-table.v29-table td:first-child {
+  width: 72px !important;
+  min-width: 72px !important;
+  max-width: 72px !important;
+}
+@media (max-width: 430px) {
+  html[data-theme] .rx-table.v29-table th:first-child,
+  html[data-theme] .rx-table.v29-table td:first-child {
+    width: 66px !important;
+    min-width: 66px !important;
+    max-width: 66px !important;
+  }
+}
+
+/* 3. Overall row: compact pill, 1-line, centered — same both themes */
+html[data-theme] .rx-table.v29-table tr.overall-row td {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+html[data-theme] .rx-table.v29-table tr.overall-row .rx-status-pill {
+  min-width: 0 !important;
+  min-height: 28px !important;
+  max-width: 100% !important;
+  padding: 6px 6px !important;
+  font-size: .80rem !important;
+  font-weight: 950 !important;
+  white-space: nowrap !important;
+  letter-spacing: -.02em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+@media (max-width: 430px) {
+  html[data-theme] .rx-table.v29-table tr.overall-row .rx-status-pill {
+    font-size: .76rem !important;
+    padding: 5px 5px !important;
+    min-height: 26px !important;
+  }
+}
+
+/* 4. Source row: compact pill — same both themes */
+html[data-theme] .rx-table.v29-table tr.source-row .rx-status-pill {
+  min-width: 0 !important;
+  min-height: 24px !important;
+  max-width: 100% !important;
+  padding: 5px 5px !important;
+  font-size: .76rem !important;
+  font-weight: 900 !important;
+  white-space: nowrap !important;
+  letter-spacing: -.02em !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+@media (max-width: 430px) {
+  html[data-theme] .rx-table.v29-table tr.source-row .rx-status-pill {
+    font-size: .72rem !important;
+    padding: 4px 4px !important;
+  }
+}
+
+/* 5. Insert chip: compact, no overlap — same both themes */
+html[data-theme] .rx-table.v29-table tr.insert-row .insert-compact-chip,
+html[data-theme] .rx-table.v29-table tr.package-row .insert-compact-chip {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  min-height: 24px !important;
+  padding: 4px 18px 4px 7px !important;
+  font-size: .70rem !important;
+}
+html[data-theme] .rx-table.v29-table tr.insert-row .insert-compact-chip .help-mark,
+html[data-theme] .rx-table.v29-table tr.package-row .insert-compact-chip .help-mark {
+  right: 3px !important;
+  width: 13px !important;
+  height: 13px !important;
+  font-size: 8px !important;
+}
+@media (max-width: 430px) {
+  html[data-theme] .rx-table.v29-table tr.insert-row .insert-compact-chip,
+  html[data-theme] .rx-table.v29-table tr.package-row .insert-compact-chip {
+    font-size: .66rem !important;
+    padding: 3px 16px 3px 6px !important;
+    min-height: 22px !important;
+  }
+}
+
+/* 6. Detail row button: same both themes */
+html[data-theme] .rx-table.v29-table tr.detail-row .rx-detail-btn {
+  font-size: .80rem !important;
+  font-weight: 950 !important;
+  white-space: nowrap !important;
+  padding: 6px 10px !important;
+}
+@media (max-width: 430px) {
+  html[data-theme] .rx-table.v29-table tr.detail-row .rx-detail-btn {
+    font-size: .76rem !important;
+    padding: 5px 8px !important;
+  }
+}
+
+/* ============================================================
+   Round 6: Fix remaining dark/light layout differences
+   All selectors use html[data-theme] (no value) at same
+   specificity as existing theme-specific rules; later wins.
+   ============================================================ */
+
+/* A. Category buttons: match light mode exact sizes for both themes.
+      html[data-theme] .v29-category-grid .top-category .cat-* = 0,4,1
+      (same as light mode .cat-* rules, later in cascade → wins) */
+html[data-theme] .v29-category-grid .top-category {
+  min-height: 62px !important;
+  padding: 7px 5px 6px !important;
+}
+html[data-theme] .v29-category-grid .top-category .cat-emoji {
+  font-size: 1.1rem !important;
+  line-height: 1 !important;
+}
+html[data-theme] .v29-category-grid .top-category .cat-name {
+  font-size: .66rem !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.03em !important;
+  color: inherit !important;
+}
+html[data-theme] .v29-category-grid .top-category .cat-count {
+  font-size: .60rem !important;
+  min-width: 28px !important;
+  padding: 2px 7px !important;
+}
+@media (max-width: 430px) {
+  html[data-theme] .v29-category-grid .top-category {
+    min-height: 60px !important;
+    padding: 7px 4px 6px !important;
+  }
+  html[data-theme] .v29-category-grid .top-category .cat-name {
+    font-size: .63rem !important;
+  }
+  html[data-theme] .v29-category-grid .top-category .cat-count {
+    font-size: .58rem !important;
+    min-width: 27px !important;
+  }
+}
+
+/* B. Label column th text: match dark mode (compact) for both themes.
+      html[data-theme] .rx-table.v29-table tr.overall-row th = 0,4,3
+      same as html[data-theme="light"] ... th — later in cascade wins. */
+html[data-theme] .rx-table.v29-table tr.overall-row th {
+  font-size: .76rem !important;
+  line-height: 1.2 !important;
+}
+html[data-theme] .rx-table.v29-table tr.insert-row th,
+html[data-theme] .rx-table.v29-table tr.package-row th {
+  font-size: .73rem !important;
+}
+
+/* C. Detail row button: keep arrow inline (flex row) for both themes */
+html[data-theme] .rx-table.v29-table tr.detail-row .rx-detail-btn {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 3px !important;
+  white-space: nowrap !important;
+}
+
+/* D. Mobile: remove light-mode's forced min-width on all cells */
+@media (max-width: 430px) {
+  html[data-theme] .rx-table.v29-table th,
+  html[data-theme] .rx-table.v29-table td {
+    min-width: 0 !important;
+  }
+}
+
+/* ============================================================
+   Round 7: Force correct sizes — add `body` to get (a,b,c+1)
+   specificity that definitively beats theme-specific rules.
+   - html[data-theme] body .cat-* = (0,4,2) > light rule (0,4,1)
+   - html[data-theme] body tr.overall-row th = (0,4,4) > (0,4,3)
+   ============================================================ */
+
+/* A. Category buttons: body raises specificity above light-mode rules */
+html[data-theme] body .v29-category-grid .top-category {
+  min-height: 62px !important;
+  padding: 7px 5px 6px !important;
+}
+html[data-theme] body .v29-category-grid .top-category .cat-emoji {
+  font-size: 1.1rem !important;
+  line-height: 1 !important;
+}
+html[data-theme] body .v29-category-grid .top-category .cat-name {
+  font-size: .66rem !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.04em !important;
+}
+html[data-theme] body .v29-category-grid .top-category .cat-count {
+  font-size: .60rem !important;
+  min-width: 28px !important;
+  padding: 2px 7px !important;
+}
+@media (max-width: 430px) {
+  html[data-theme] body .v29-category-grid .top-category {
+    min-height: 60px !important;
+    padding: 7px 4px 6px !important;
+  }
+  html[data-theme] body .v29-category-grid .top-category .cat-name {
+    font-size: .63rem !important;
+  }
+  html[data-theme] body .v29-category-grid .top-category .cat-count {
+    font-size: .58rem !important;
+    min-width: 27px !important;
+  }
+}
+
+/* B. Label th: body raises specificity above light-mode rules */
+html[data-theme] body .rx-table.v29-table tr.overall-row th {
+  font-size: .73rem !important;
+  line-height: 1.2 !important;
+}
+html[data-theme] body .rx-table.v29-table tr.insert-row th,
+html[data-theme] body .rx-table.v29-table tr.package-row th {
+  font-size: .73rem !important;
+}
+
+/* ============================================================
+   Round 8: Antibacterial dark badge + button alignment
+   ============================================================ */
+
+/* Antibacterial count badge: explicit dark teal (prevents white badge in dark mode) */
+html[data-theme="dark"] .v29-category-grid .top-category.antibacterial .cat-count {
+  background: rgba(23,207,243,.12) !important;
+  border-color: rgba(23,207,243,.38) !important;
+  color: rgba(23,207,243,.88) !important;
+}
+
+/* Category comparison modal: equalise 詳細 and 選択中 button heights */
+.comparison-table.cmp-v2 .cmp-btn-detail,
+.comparison-table.cmp-v2 .cmp-btn-select {
+  margin-top: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 26px !important;
+  min-height: 26px !important;
+  padding: 0 9px !important;
+  font-size: .63rem !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
 }
