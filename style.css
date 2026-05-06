@@ -9365,3 +9365,110 @@ html[data-theme="light"] .v29-table .overall-row > td {
   background: rgba(17,146,76,.07) !important;
 }
 
+
+/* ============================================================
+   Round 4 fixes
+   ============================================================ */
+
+/* 1. Hide number circles before drug names in v29-table */
+.rx-col-num {
+  display: none !important;
+}
+
+/* 2. Fix overall-row pill: reduce size to prevent 2-line wrap */
+.v29-table .overall-row .rx-status-pill {
+  font-size: .94rem !important;
+  padding: 10px 8px !important;
+  min-height: 34px !important;
+}
+
+/* 3. Fix insert-compact-chip: prevent ? help-mark overlap */
+.v29-table .insert-row .insert-compact-chip {
+  padding: 5px 22px 5px 8px !important;
+  font-size: .76rem !important;
+}
+.v29-table .insert-row .insert-compact-chip .help-mark {
+  right: 4px !important;
+  width: 15px !important;
+  height: 15px !important;
+  font-size: .66rem !important;
+  line-height: 15px !important;
+}
+
+/* 4. 4+ drug scroll table: fixed column widths (same as 3-drug case) */
+.v29-table-wrap.scroll-table {
+  overflow-x: auto !important;
+}
+.v29-table-wrap.scroll-table .v29-table {
+  table-layout: fixed !important;
+  width: auto !important;
+  min-width: max-content !important;
+}
+.v29-table-wrap.scroll-table .v29-table th:first-child,
+.v29-table-wrap.scroll-table .v29-table td:first-child {
+  width: 96px !important;
+  min-width: 96px !important;
+  max-width: 96px !important;
+}
+.v29-table-wrap.scroll-table .v29-table th:not(:first-child),
+.v29-table-wrap.scroll-table .v29-table td:not(:first-child) {
+  width: 110px !important;
+  min-width: 110px !important;
+  max-width: 110px !important;
+}
+@media (max-width: 430px) {
+  .v29-table-wrap.scroll-table .v29-table th:first-child,
+  .v29-table-wrap.scroll-table .v29-table td:first-child {
+    width: 88px !important;
+    min-width: 88px !important;
+    max-width: 88px !important;
+  }
+  .v29-table-wrap.scroll-table .v29-table th:not(:first-child),
+  .v29-table-wrap.scroll-table .v29-table td:not(:first-child) {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+  }
+}
+
+/* 5. Category button height: override dark mode high-specificity rule */
+html[data-theme="dark"] .v29-category-grid .top-category {
+  min-height: 70px !important;
+  padding: 7px 5px 6px !important;
+}
+@media (max-width: 430px) {
+  html[data-theme="dark"] .v29-category-grid .top-category {
+    min-height: 66px !important;
+    padding: 6px 4px 5px !important;
+  }
+}
+
+/* 6. Unify category cat-name and cat-count colors across all categories */
+.v29-category-grid .top-category .cat-name {
+  color: #CBD5E1 !important;
+}
+.v29-category-grid .top-category .cat-count {
+  color: #94A3B8 !important;
+  background: rgba(112,132,165,.16) !important;
+  border-color: rgba(112,132,165,.28) !important;
+}
+
+/* 7. cmp-v2 sticky label column: fully opaque background to avoid bleed-through on scroll */
+.comparison-table.cmp-v2 .cmp-label-col {
+  background: #050d18 !important;
+  z-index: 10 !important;
+}
+html[data-theme="light"] .comparison-table.cmp-v2 .cmp-label-col {
+  background: #f0f5fb !important;
+  z-index: 10 !important;
+}
+
+/* 8. cmp-v2: thick separator between 妊娠 section and 授乳 section */
+.comparison-table.cmp-v2 .cmp-row-lo .cmp-cell,
+.comparison-table.cmp-v2 .cmp-row-lo .cmp-label-td {
+  border-top: 3px solid rgba(160,200,255,.30) !important;
+}
+html[data-theme="light"] .comparison-table.cmp-v2 .cmp-row-lo .cmp-cell,
+html[data-theme="light"] .comparison-table.cmp-v2 .cmp-row-lo .cmp-label-td {
+  border-top: 3px solid rgba(71,120,198,.28) !important;
+}
