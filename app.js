@@ -166,6 +166,7 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
       }
       for (const drug of items.slice(0, 30)) {
         const already = selectedDrugs.some(d => d.id === drug.id);
+        const favActive = isFavorite(drug.id);
         const el = document.createElement("div");
         el.className = "suggestion";
         el.innerHTML = `
@@ -174,10 +175,17 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
               <div class="brand">${escapeHtml(drug.brands.join("、"))}${already ? "（選択済み）" : ""}</div>
               <div class="meta">${escapeHtml(drug.ingredientJa)} / ${escapeHtml(drug.ingredientEn)}</div>
             </div>
-            <span class="class-pill">${escapeHtml(drug.className)}</span>
+            <div class="suggestion-right">
+              <button type="button" class="fav-btn${favActive ? " fav-active" : ""}" data-fav-id="${escapeHtml(drug.id)}" aria-label="お気に入り" aria-pressed="${favActive}">★</button>
+              <span class="class-pill">${escapeHtml(drug.className)}</span>
+            </div>
           </div>
         `;
-        el.addEventListener("click", () => addDrug(drug));
+        el.querySelector(".fav-btn").addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleFavorite(drug.id);
+        });
+        el.addEventListener("click", (e) => { if (!e.target.closest(".fav-btn")) addDrug(drug); });
         suggestionsEl.appendChild(el);
       }
     }
@@ -323,17 +331,46 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
             </thead>
             <tbody>
               ${row("総合評価", "", (drug, type) => `<span class="rx-status-pill ${badgeClass(type)}">${escapeHtml(getAxisSummary(drug))}</span>`, "overall-row")}
-              ${row("専門書", "妊娠と授乳　4版", (drug, type) => `<span class="rx-status-pill ${badgeClass(type)}">${escapeHtml(getAxisSummary(drug))}</span>`, "source-row")}
+              ${row("専門書", "妊娠と授乳4版", (drug, type) => `<span class="rx-status-pill ${badgeClass(type)}">${escapeHtml(getAxisSummary(drug))}</span>`, "source-row")}
               ${row("添付文書", "", (drug) => renderInsertHelpButtonCompact(getAxisInsert(drug), currentMode), "insert-row package-row")}
               ${row("詳細", "", (drug) => `<button type="button" class="rx-detail-btn" data-drug-id="${escapeHtml(drug.id)}">詳細を見る ›</button>`, "detail-row")}
             </tbody>
           </table>
         </div>
 
+        ${(() => {
+          const dangerDrugs = ranked.filter(d => strongestType(d) === "danger");
+          const rows = dangerDrugs.map(drug => {
+            const alts = findAlternatives(drug);
+            if (!alts) return "";
+            return `
+              <div class="alt-row">
+                <span class="alt-src">${escapeHtml(drug.brands[0])}（禁忌）</span>
+                <span class="alt-sep">→</span>
+                <div class="alt-row-chips">
+                  ${alts.drugs.map(d => `<button type="button" class="alt-chip" data-add-alt="${escapeHtml(d.id)}">${escapeHtml(d.brands[0])}<small>${escapeHtml(d.ingredientJa)}</small></button>`).join("")}
+                </div>
+              </div>`;
+          }).filter(Boolean);
+          return rows.length ? `
+            <div class="alt-summary">
+              <div class="alt-summary-head">🔄 禁忌薬の代替候補（${axisLabel}）</div>
+              ${rows.join("")}
+              <p class="alt-note">適応・患者背景を確認のうえご判断ください。タップで選択に追加します。</p>
+            </div>` : "";
+        })()}
+
         <div class="v43-result-caution">
           本判定は添付文書等の情報をもとにした処方監査補助です。最終判断は患者背景、妊娠週数、授乳児の月齢、投与量、投与期間、疾患の重症度を踏まえて行ってください。
         </div>
       `;
+
+      resultEl.querySelectorAll("[data-add-alt]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const drug = DRUGS.find(d => d.id === btn.dataset.addAlt);
+          if (drug) addDrug(drug);
+        });
+      });
 
       resultEl.querySelectorAll("[data-result-mode]").forEach(btn => {
         btn.addEventListener("click", () => {
@@ -499,6 +536,37 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
 
     function riskRank(drug) {
       return { mismatch: 5, danger: 4, caution: 3, unknown: 2, ok: 1 }[strongestType(drug)] || 0;
+    }
+
+    function findAlternatives(drug) {
+      const axisSummary = d => currentMode === "pregnancy" ? d.pregnancySummary : d.lactationSummary;
+      const s = axisSummary(drug);
+      if (!s.includes("禁忌") && s !== "使用不可") return null;
+
+      const sameClass = DRUGS.filter(d => d.id !== drug.id && d.className === drug.className && axisSummary(d) === "使用可");
+      if (sameClass.length) return { label: "同分類の代替候補", drugs: sameClass.slice(0, 5) };
+
+      const crossMap = {
+        quinolone: ["penicillin", "cephem", "macrolide"],
+        tetracycline: ["penicillin", "cephem", "macrolide"],
+        aminoglycoside: ["penicillin", "cephem"],
+        chloramphenicol: ["penicillin", "cephem", "macrolide"],
+        analgesic_oral_nsaid: ["analgesic_acetaminophen"],
+        analgesic_basic_nsaid: ["analgesic_acetaminophen"],
+        analgesic_topical_nsaid: ["analgesic_acetaminophen"],
+        cv_acei: ["cv_ca_blocker", "cv_methyldopa", "cv_hydralazine"],
+        cv_arb: ["cv_ca_blocker", "cv_methyldopa", "cv_hydralazine"],
+        diabetes_thiazolidine: ["diabetes_insulin"],
+        diabetes_sglt2: ["diabetes_insulin", "diabetes_biguanide"],
+        diabetes_glp1: ["diabetes_insulin"],
+        diabetes_gip_glp1: ["diabetes_insulin"],
+      };
+      const altKeys = crossMap[drug.detailKey] || [];
+      if (altKeys.length) {
+        const cross = DRUGS.filter(d => altKeys.includes(d.detailKey) && axisSummary(d) === "使用可");
+        if (cross.length) return { label: "近縁分類の代替候補", drugs: cross.slice(0, 5) };
+      }
+      return null;
     }
 
     function renderDrugAccordion(drug, idx) {
@@ -886,6 +954,67 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
 
     const HISTORY_KEY = "pregnancyLactationDrugHistory";
     const THEME_KEY = "pregnancyLactationThemeMode";
+    const FAVORITES_KEY = "pregnancyLactationFavorites";
+
+    function getFavorites() {
+      try { return JSON.parse(localStorage.getItem(FAVORITES_KEY) || "[]"); }
+      catch (e) { return []; }
+    }
+
+    function saveFavorites(ids) {
+      localStorage.setItem(FAVORITES_KEY, JSON.stringify(ids));
+    }
+
+    function isFavorite(drugId) {
+      return getFavorites().includes(drugId);
+    }
+
+    function toggleFavorite(drugId) {
+      let favs = getFavorites();
+      const active = !favs.includes(drugId);
+      favs = active ? [drugId, ...favs.filter(id => id !== drugId)] : favs.filter(id => id !== drugId);
+      saveFavorites(favs);
+      renderFavoritesSection();
+      document.querySelectorAll(`[data-fav-id="${drugId}"]`).forEach(btn => {
+        btn.classList.toggle("fav-active", active);
+        btn.setAttribute("aria-pressed", String(active));
+        if (btn.classList.contains("fav-modal-btn")) {
+          btn.textContent = active ? "★ お気に入り登録済み" : "☆ お気に入りに追加";
+        }
+      });
+    }
+
+    function renderFavoritesSection() {
+      const favSection = document.getElementById("favSection");
+      if (!favSection) return;
+      const favIds = getFavorites();
+      if (!favIds.length) { favSection.hidden = true; return; }
+      const favDrugs = favIds.map(id => DRUGS.find(d => d.id === id)).filter(Boolean);
+      favSection.hidden = false;
+      favSection.innerHTML = `
+        <div class="fav-header">
+          <span class="fav-title">★ お気に入り</span>
+          <span class="fav-hint">${favDrugs.length}剤 · タップで選択に追加</span>
+        </div>
+        <div class="fav-chips">
+          ${favDrugs.map(drug => `
+            <div class="fav-chip">
+              <button type="button" class="fav-chip-name" data-fav-select="${escapeHtml(drug.id)}">${escapeHtml(drug.brands[0])}</button>
+              <button type="button" class="fav-chip-remove" data-fav-remove="${escapeHtml(drug.id)}" aria-label="${escapeHtml(drug.brands[0])}をお気に入りから外す">✕</button>
+            </div>
+          `).join("")}
+        </div>
+      `;
+      favSection.querySelectorAll("[data-fav-select]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const drug = DRUGS.find(d => d.id === btn.dataset.favSelect);
+          if (drug) addDrug(drug);
+        });
+      });
+      favSection.querySelectorAll("[data-fav-remove]").forEach(btn => {
+        btn.addEventListener("click", (e) => { e.stopPropagation(); toggleFavorite(btn.dataset.favRemove); });
+      });
+    }
 
     function getHistory() {
       try {
@@ -1035,7 +1164,21 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
             <h4>注意</h4>
             <p>本判定は添付文書等の情報をもとにした処方監査補助です。最終判断は患者背景、妊娠週数、授乳児の月齢、投与量、投与期間、疾患の重症度を踏まえて行ってください。</p>
           </div>
+          ${(() => {
+            const alts = findAlternatives(drug);
+            if (!alts) return "";
+            const axisLabel = mode === "pregnancy" ? "妊娠" : "授乳";
+            return `
+              <div class="alt-suggest">
+                <div class="alt-suggest-title">🔄 ${escapeHtml(alts.label)}（${axisLabel}）</div>
+                <div class="alt-chips">
+                  ${alts.drugs.map(d => `<button type="button" class="alt-chip" data-add-alt="${escapeHtml(d.id)}"><span class="alt-chip-brand">${escapeHtml(d.brands[0])}</span><span class="alt-chip-meta">${escapeHtml(d.ingredientJa)}</span></button>`).join("")}
+                </div>
+                <p class="alt-suggest-note">適応・患者背景を確認のうえご判断ください。タップで選択に追加します。</p>
+              </div>`;
+          })()}
           <div class="detail-actions">
+            <button type="button" class="fav-modal-btn${isFavorite(drug.id) ? " fav-active" : ""}" data-fav-id="${escapeHtml(drug.id)}">${isFavorite(drug.id) ? "★ お気に入り登録済み" : "☆ お気に入りに追加"}</button>
             <button type="button" class="ghost" id="openSameClassBtn">同分類を比較</button>
           </div>
         </section>
@@ -1051,6 +1194,13 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
           }
         });
       }
+
+      drugDetailBody.querySelectorAll("[data-add-alt]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const d = DRUGS.find(x => x.id === btn.dataset.addAlt);
+          if (d) { closeDrugDetailModal(); addDrug(d); }
+        });
+      });
 
       drugDetailModal.classList.add("open");
       drugDetailModal.setAttribute("aria-hidden", "false");
@@ -1833,6 +1983,7 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
     initClassButtons();
     initCategoryBrowser();
     renderSelectedChips();
+    renderFavoritesSection();
 
 // Network-first service worker registration.
     // ブラウザ表示・ホーム画面追加後のWebアプリ表示のどちらでも、起動時に更新確認します。
