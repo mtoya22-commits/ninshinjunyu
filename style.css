@@ -9778,3 +9778,63 @@ html[data-theme="light"] .comparison-table.cmp-v2 .cmp-row-po .cmp-label-col,
 html[data-theme="light"] .comparison-table.cmp-v2 .cmp-row-pi .cmp-label-col,
 html[data-theme="light"] .comparison-table.cmp-v2 .cmp-row-lo .cmp-label-col,
 html[data-theme="light"] .comparison-table.cmp-v2 .cmp-row-li .cmp-label-col { background: #f0f5fb !important; }
+
+/* ============================================================
+   Round 13: Favorites + Alternative drug suggestion UI
+   ============================================================ */
+
+/* --- Favorites section (above category grid) --- */
+.fav-section { margin: 0 0 10px; padding: 10px 12px 12px; background: rgba(251,191,36,.07); border: 1px solid rgba(251,191,36,.25); border-radius: 14px; }
+html[data-theme="light"] .fav-section { background: rgba(251,191,36,.06); border-color: rgba(180,140,0,.18); }
+.fav-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.fav-title { font-size: .72rem; font-weight: 700; color: rgba(251,191,36,.95); letter-spacing: .03em; }
+html[data-theme="light"] .fav-title { color: #b45309; }
+.fav-hint { font-size: .62rem; color: rgba(255,255,255,.4); margin-left: auto; }
+html[data-theme="light"] .fav-hint { color: #92400e; }
+.fav-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.fav-chip { display: inline-flex; align-items: center; background: rgba(251,191,36,.12); border: 1px solid rgba(251,191,36,.30); border-radius: 20px; overflow: hidden; }
+html[data-theme="light"] .fav-chip { background: rgba(180,140,0,.08); border-color: rgba(180,140,0,.25); }
+.fav-chip-name { font-size: .72rem; font-weight: 600; padding: 5px 8px 5px 12px; color: rgba(255,255,255,.9); background: none; border: none; cursor: pointer; }
+html[data-theme="light"] .fav-chip-name { color: #78350f; }
+.fav-chip-remove { font-size: .65rem; padding: 5px 8px; color: rgba(255,255,255,.4); background: none; border: none; cursor: pointer; line-height: 1; }
+html[data-theme="light"] .fav-chip-remove { color: #92400e; }
+
+/* --- Fav button in search suggestions --- */
+.suggestion-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.fav-btn { background: none; border: none; cursor: pointer; font-size: .9rem; color: rgba(255,255,255,.25); padding: 2px 4px; line-height: 1; flex-shrink: 0; transition: color .15s; }
+html[data-theme="light"] .fav-btn { color: rgba(0,0,0,.20); }
+.fav-btn.fav-active { color: #fbbf24; }
+html[data-theme="light"] .fav-btn.fav-active { color: #d97706; }
+
+/* --- Fav button in detail modal --- */
+.fav-modal-btn { display: inline-flex; align-items: center; padding: 7px 14px; border-radius: 20px; border: 1.5px solid rgba(251,191,36,.30); background: rgba(251,191,36,.06); color: rgba(255,255,255,.55); font-size: .72rem; cursor: pointer; transition: background .15s, color .15s; }
+html[data-theme="light"] .fav-modal-btn { border-color: rgba(180,140,0,.28); background: rgba(251,191,36,.05); color: #78350f; }
+.fav-modal-btn.fav-active { background: rgba(251,191,36,.18); border-color: rgba(251,191,36,.55); color: #fbbf24; }
+html[data-theme="light"] .fav-modal-btn.fav-active { background: rgba(180,140,0,.12); border-color: rgba(180,140,0,.45); color: #b45309; }
+
+/* --- Alternative drug suggestion (results page) --- */
+.alt-summary { margin: 12px 0 0; padding: 10px 14px 12px; background: rgba(99,102,241,.06); border: 1px solid rgba(99,102,241,.18); border-radius: 12px; }
+html[data-theme="light"] .alt-summary { background: rgba(99,102,241,.04); border-color: rgba(99,102,241,.16); }
+.alt-summary-head { font-size: .70rem; font-weight: 700; color: rgba(165,180,252,.9); margin-bottom: 10px; }
+html[data-theme="light"] .alt-summary-head { color: #4338ca; }
+.alt-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.alt-src { font-size: .68rem; color: rgba(252,165,165,.9); font-weight: 600; white-space: nowrap; }
+html[data-theme="light"] .alt-src { color: #dc2626; }
+.alt-sep { font-size: .75rem; color: rgba(255,255,255,.35); flex-shrink: 0; }
+html[data-theme="light"] .alt-sep { color: #6b7280; }
+.alt-row-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.alt-chip { display: inline-flex; flex-direction: column; align-items: flex-start; padding: 4px 10px; background: rgba(99,102,241,.10); border: 1px solid rgba(99,102,241,.25); border-radius: 8px; cursor: pointer; text-align: left; line-height: 1.2; }
+html[data-theme="light"] .alt-chip { background: rgba(99,102,241,.06); border-color: rgba(99,102,241,.20); }
+.alt-chip small, .alt-chip .alt-chip-meta { font-size: .58rem; color: rgba(255,255,255,.45); display: block; }
+html[data-theme="light"] .alt-chip small, html[data-theme="light"] .alt-chip .alt-chip-meta { color: #6366f1; }
+.alt-chip-brand { font-size: .70rem; font-weight: 600; color: rgba(255,255,255,.9); display: block; }
+html[data-theme="light"] .alt-chip-brand { color: #312e81; }
+.alt-note, .alt-suggest-note { font-size: .58rem; color: rgba(255,255,255,.30); margin: 6px 0 0; }
+html[data-theme="light"] .alt-note, html[data-theme="light"] .alt-suggest-note { color: #6366f1; opacity: .7; }
+
+/* --- Alternative drug suggestion (detail modal) --- */
+.alt-suggest { margin: 12px 0 0; padding: 10px 12px 12px; background: rgba(99,102,241,.06); border: 1px solid rgba(99,102,241,.18); border-radius: 12px; }
+html[data-theme="light"] .alt-suggest { background: rgba(99,102,241,.04); border-color: rgba(99,102,241,.16); }
+.alt-suggest-title { font-size: .68rem; font-weight: 700; color: rgba(165,180,252,.9); margin-bottom: 8px; }
+html[data-theme="light"] .alt-suggest-title { color: #4338ca; }
+.alt-chips { display: flex; flex-wrap: wrap; gap: 6px; }
