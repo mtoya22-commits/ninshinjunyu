@@ -9763,3 +9763,18 @@ html[data-theme="dark"] .v29-category-grid .top-category .cat-count {
   white-space: nowrap !important;
   vertical-align: middle !important;
 }
+
+/* ============================================================
+   Round 12: Fully opaque sticky label column in cmp-v2 table
+   Row-specific rules set rgba(.04) on cmp-label-td too, making
+   sticky cells see-through on horizontal scroll.
+   Override with solid backgrounds using higher/later cascade.
+   ============================================================ */
+html[data-theme] .comparison-table.cmp-v2 .cmp-row-po .cmp-label-col,
+html[data-theme] .comparison-table.cmp-v2 .cmp-row-pi .cmp-label-col,
+html[data-theme] .comparison-table.cmp-v2 .cmp-row-lo .cmp-label-col,
+html[data-theme] .comparison-table.cmp-v2 .cmp-row-li .cmp-label-col { background: #050d18 !important; }
+html[data-theme="light"] .comparison-table.cmp-v2 .cmp-row-po .cmp-label-col,
+html[data-theme="light"] .comparison-table.cmp-v2 .cmp-row-pi .cmp-label-col,
+html[data-theme="light"] .comparison-table.cmp-v2 .cmp-row-lo .cmp-label-col,
+html[data-theme="light"] .comparison-table.cmp-v2 .cmp-row-li .cmp-label-col { background: #f0f5fb !important; }
