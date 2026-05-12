@@ -339,7 +339,7 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
         </div>
 
         ${(() => {
-          const dangerDrugs = ranked.filter(d => strongestType(d) === "danger");
+          const dangerDrugs = ranked.filter(d => findAlternatives(d) !== null);
           const rows = dangerDrugs.map(drug => {
             const alts = findAlternatives(drug);
             if (!alts) return "";
