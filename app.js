@@ -339,7 +339,7 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
         </div>
 
         ${(() => {
-          const dangerDrugs = ranked.filter(d => strongestType(d) === "danger");
+          const dangerDrugs = ranked.filter(d => findAlternatives(d) !== null);
           const rows = dangerDrugs.map(drug => {
             const alts = findAlternatives(drug);
             if (!alts) return "";
@@ -597,8 +597,7 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
             ${type === "mismatch" ? `
               <div class="alert mismatch">
                 ${axisLabel}の総合評価と添付文書情報に乖離があります。必要性、代替薬、疑義照会要否を確認してください。
-              </div>
-            ` : ""}
+              </div>` : ""}
 
             <section class="detail-card open" style="box-shadow:none; border-radius:16px;">
               <h3>${escapeHtml(detail.title || drug.className)}：${axisLabel}の詳細要約</h3>
