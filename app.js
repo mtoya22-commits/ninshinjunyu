@@ -354,7 +354,7 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
           }).filter(Boolean);
           return rows.length ? `
             <div class="alt-summary">
-              <div class="alt-summary-head">🔄 禁忌薬の代替候補（${axisLabel}）</div>
+              <div class="alt-summary-head">🔄 代替薬の確認（${axisLabel}）</div>
               ${rows.join("")}
               <p class="alt-note">適応・患者背景を確認のうえご判断ください。タップで選択に追加します。</p>
             </div>` : "";
@@ -541,7 +541,8 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
     function findAlternatives(drug) {
       const axisSummary = d => currentMode === "pregnancy" ? d.pregnancySummary : d.lactationSummary;
       const s = axisSummary(drug);
-      if (!s.includes("禁忌") && s !== "使用不可") return null;
+      const ins = currentMode === "pregnancy" ? drug.pregnancyInsert : drug.lactationInsert;
+      if (!s.includes("禁忌") && s !== "使用不可" && !ins.includes("禁忌")) return null;
 
       const sameClass = DRUGS.filter(d => d.id !== drug.id && d.className === drug.className && axisSummary(d) === "使用可");
       if (sameClass.length) return { label: "同分類の代替候補", drugs: sameClass.slice(0, 5) };
