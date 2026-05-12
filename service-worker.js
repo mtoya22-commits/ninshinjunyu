@@ -3,7 +3,7 @@
    Version: 20260505-1612
 */
 
-const CACHE_NAME = "pregnancy-lactation-checker-20260507-1700";
+const CACHE_NAME = "pregnancy-lactation-checker-20260512-1000";
 
 const APP_SHELL = [
   "./",
