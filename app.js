@@ -331,7 +331,7 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
             </thead>
             <tbody>
               ${row("総合評価", "", (drug, type) => `<span class="rx-status-pill ${badgeClass(type)}">${escapeHtml(getAxisSummary(drug))}</span>`, "overall-row")}
-              ${row("専門書", "妊娠と授乳4版", (drug, type) => `<span class="rx-status-pill ${badgeClass(type)}">${escapeHtml(getAxisSummary(drug))}</span>`, "source-row")}
+              ${row("専門書", "妊娠と授乳 第4版", (drug, type) => `<span class="rx-status-pill ${badgeClass(type)}">${escapeHtml(getAxisSummary(drug))}</span>`, "source-row")}
               ${row("添付文書", "", (drug) => renderInsertHelpButtonCompact(getAxisInsert(drug), currentMode), "insert-row package-row")}
               ${row("詳細", "", (drug) => `<button type="button" class="rx-detail-btn" data-drug-id="${escapeHtml(drug.id)}">詳細を見る ›</button>`, "detail-row")}
             </tbody>
@@ -1658,7 +1658,7 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
           iconClass: "cmp-icon-po",
           axis: "妊娠",
           metric: "総合評価",
-          caption: "JSNP 第39版",
+          caption: "妊娠と授乳 第4版",
           cells: drugs.map(d => {
             const type = statusType(d.pregnancySummary, d.pregnancyInsert, "pregnancy");
             return `<td class="cmp-cell cmp-cell-${type}">${comparePillCmp(d.pregnancySummary, d.pregnancyInsert, "pregnancy")}</td>`;
@@ -1682,7 +1682,7 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
           iconClass: "cmp-icon-lo",
           axis: "授乳",
           metric: "総合評価",
-          caption: "JSNP 第39版",
+          caption: "妊娠と授乳 第4版",
           cells: drugs.map(d => {
             const type = statusType(d.lactationSummary, d.lactationInsert, "lactation");
             return `<td class="cmp-cell cmp-cell-${type}">${comparePillCmp(d.lactationSummary, d.lactationInsert, "lactation")}</td>`;
