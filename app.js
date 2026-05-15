@@ -339,25 +339,33 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
         </div>
 
         ${(() => {
-          const dangerDrugs = ranked.filter(d => findAlternatives(d) !== null);
-          const rows = dangerDrugs.map(drug => {
-            const alts = findAlternatives(drug);
-            if (!alts) return "";
-            return `
-              <div class="alt-row">
-                <span class="alt-src">${escapeHtml(drug.brands[0])}（禁忌）</span>
-                <span class="alt-sep">→</span>
-                <div class="alt-row-chips">
-                  ${alts.drugs.map(d => `<button type="button" class="alt-chip" data-add-alt="${escapeHtml(d.id)}">${escapeHtml(d.brands[0])}<small>${escapeHtml(d.ingredientJa)}</small></button>`).join("")}
-                </div>
-              </div>`;
+          const axisGroups = ["pregnancy", "lactation"].map(axis => {
+            const label = axis === "pregnancy" ? "妊娠" : "授乳";
+            const rows = ranked.map(drug => {
+              const alts = findAlternatives(drug, axis);
+              if (!alts) return "";
+              return `
+                <div class="alt-row">
+                  <span class="alt-src">${escapeHtml(drug.brands[0])}</span>
+                  <span class="alt-sep">→</span>
+                  <div class="alt-row-chips">
+                    ${alts.drugs.map(d => `<button type="button" class="alt-chip" data-add-alt="${escapeHtml(d.id)}">${escapeHtml(d.brands[0])}<small>${escapeHtml(d.ingredientJa)}</small></button>`).join("")}
+                  </div>
+                </div>`;
+            }).filter(Boolean);
+            return rows.length ? { label, rows } : null;
           }).filter(Boolean);
-          return rows.length ? `
+          if (!axisGroups.length) return "";
+          return `
             <div class="alt-summary">
-              <div class="alt-summary-head">🔄 代替薬の確認（${axisLabel}）</div>
-              ${rows.join("")}
+              <div class="alt-summary-head">🔄 代替薬の確認</div>
+              ${axisGroups.map(({ label, rows }) => `
+                <div class="alt-axis-group">
+                  <div class="alt-axis-label">${label}</div>
+                  ${rows.join("")}
+                </div>`).join("")}
               <p class="alt-note">適応・患者背景を確認のうえご判断ください。タップで選択に追加します。</p>
-            </div>` : "";
+            </div>`;
         })()}
 
         <div class="v43-result-caution">
@@ -538,13 +546,21 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
       return { mismatch: 5, danger: 4, caution: 3, unknown: 2, ok: 1 }[strongestType(drug)] || 0;
     }
 
-    function findAlternatives(drug) {
-      const axisSummary = d => currentMode === "pregnancy" ? d.pregnancySummary : d.lactationSummary;
+    function findAlternatives(drug, axis) {
+      if (!axis) axis = currentMode;
+      const axisSummary = d => axis === "pregnancy" ? d.pregnancySummary : d.lactationSummary;
+      const axisInsert = d => axis === "pregnancy" ? d.pregnancyInsert : d.lactationInsert;
       const s = axisSummary(drug);
-      const ins = currentMode === "pregnancy" ? drug.pregnancyInsert : drug.lactationInsert;
+      const ins = axisInsert(drug);
       if (!s.includes("禁忌") && s !== "使用不可" && !ins.includes("禁忌")) return null;
 
-      const sameClass = DRUGS.filter(d => d.id !== drug.id && d.className === drug.className && axisSummary(d) === "使用可");
+      // 対象薬が添付文書禁忌の場合、同じく禁忌の同分類薬は代替候補から除外（例：キノロン→キノロン防止）
+      const sameClass = DRUGS.filter(d =>
+        d.id !== drug.id &&
+        d.className === drug.className &&
+        axisSummary(d) === "使用可" &&
+        (!ins.includes("禁忌") || !axisInsert(d).includes("禁忌"))
+      );
       if (sameClass.length) return { label: "同分類の代替候補", drugs: sameClass.slice(0, 5) };
 
       const crossMap = {
@@ -555,8 +571,8 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
         analgesic_oral_nsaid: ["analgesic_acetaminophen"],
         analgesic_basic_nsaid: ["analgesic_acetaminophen"],
         analgesic_topical_nsaid: ["analgesic_acetaminophen"],
-        cv_acei: ["cv_ca_blocker", "cv_methyldopa", "cv_hydralazine"],
-        cv_arb: ["cv_ca_blocker", "cv_methyldopa", "cv_hydralazine"],
+        cv_ace: ["cv_ca", "cv_central", "cv_vasodilator"],
+        cv_arb: ["cv_ca", "cv_central", "cv_vasodilator"],
         diabetes_thiazolidine: ["diabetes_insulin"],
         diabetes_sglt2: ["diabetes_insulin", "diabetes_biguanide"],
         diabetes_glp1: ["diabetes_insulin"],
@@ -1165,15 +1181,23 @@ const PIN_HASH = "3472adbbcb9677d1b45365d37d96d1c33217d745567577fd9bd5c2766a2583
             <p>本判定は添付文書等の情報をもとにした処方監査補助です。最終判断は患者背景、妊娠週数、授乳児の月齢、投与量、投与期間、疾患の重症度を踏まえて行ってください。</p>
           </div>
           ${(() => {
-            const alts = findAlternatives(drug);
-            if (!alts) return "";
-            const axisLabel = mode === "pregnancy" ? "妊娠" : "授乳";
+            const axes = mode === "both" ? ["pregnancy", "lactation"] : [mode === "pregnancy" ? "pregnancy" : "lactation"];
+            const axisLabels = { pregnancy: "妊娠", lactation: "授乳" };
+            const sections = axes.map(axis => {
+              const alts = findAlternatives(drug, axis);
+              if (!alts) return "";
+              return `
+                <div class="alt-suggest">
+                  <div class="alt-suggest-title">🔄 ${escapeHtml(alts.label)}（${axisLabels[axis]}）</div>
+                  <div class="alt-chips">
+                    ${alts.drugs.map(d => `<button type="button" class="alt-chip" data-add-alt="${escapeHtml(d.id)}"><span class="alt-chip-brand">${escapeHtml(d.brands[0])}</span><span class="alt-chip-meta">${escapeHtml(d.ingredientJa)}</span></button>`).join("")}
+                  </div>
+                </div>`;
+            }).filter(Boolean);
+            if (!sections.length) return "";
             return `
-              <div class="alt-suggest">
-                <div class="alt-suggest-title">🔄 ${escapeHtml(alts.label)}（${axisLabel}）</div>
-                <div class="alt-chips">
-                  ${alts.drugs.map(d => `<button type="button" class="alt-chip" data-add-alt="${escapeHtml(d.id)}"><span class="alt-chip-brand">${escapeHtml(d.brands[0])}</span><span class="alt-chip-meta">${escapeHtml(d.ingredientJa)}</span></button>`).join("")}
-                </div>
+              <div class="alt-suggest-wrapper">
+                ${sections.join("")}
                 <p class="alt-suggest-note">適応・患者背景を確認のうえご判断ください。タップで選択に追加します。</p>
               </div>`;
           })()}
